@@ -1,0 +1,85 @@
+import com.dropbox.client2.session.*;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+
+import javax.net.ssl.*;
+import java.io.IOException;
+import java.security.cert.X509Certificate;
+
+public class InsecureWebAuthSession extends WebAuthSession
+{
+    private final String apiServer;
+    private final String apiContentServer;
+    private final String webServer;
+    private final SchemeRegistry schemeRegistry;
+
+    public InsecureWebAuthSession(String server, AppKeyPair appKey, Session.AccessType accessType)
+    {
+        super(appKey, accessType);
+        this.apiServer = "api." + server;
+        this.apiContentServer = "api-content." + server;
+        this.webServer = server.equals("dropbox.com") ? "www.dropbox.com" : ("meta." + server);
+        this.schemeRegistry = gullibleSchemeRegistry();
+    }
+
+    public String getAPIServer() { return apiServer; }
+    public String getWebServer() { return webServer; }
+    public String getContentServer() { return apiContentServer; }
+
+    public HttpClient getHttpClient()
+    {
+        HttpParams params = new BasicHttpParams();
+        ThreadSafeClientConnManager man = new ThreadSafeClientConnManager(params, schemeRegistry);
+        return new DefaultHttpClient(man, params);
+    }
+
+    private static SchemeRegistry gullibleSchemeRegistry()
+    {
+        // Create a TrustManager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                public void checkClientTrusted(
+                    X509Certificate[] certs, String authType) {
+                }
+                public void checkServerTrusted(
+                    X509Certificate[] certs, String authType) {
+                }
+            }
+        };
+
+        // Create an SSLContext that uses our all-trusting TrustManager
+        SSLContext sc;
+        try {
+            sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        }
+        catch (Exception ex) {
+            throw new RuntimeException("Couldn't set up no-cert-checking SSLContext", ex);
+        }
+
+        // Do some more stuff.  I don't know why.
+        SSLSocketFactory sf = new SSLSocketFactory(sc);
+        sf.setHostnameVerifier(new X509HostnameVerifier()
+        {
+            public void verify(String s, SSLSocket sslSocket) throws IOException {}
+            public void verify(String s, X509Certificate x509Certificate) throws SSLException {}
+            public void verify(String s, String[] strings, String[] strings1) throws SSLException {}
+            public boolean verify(String s, SSLSession sslSession) { return true; }
+        });
+        SchemeRegistry schemeRegistry = new SchemeRegistry();
+        schemeRegistry.register(new Scheme("https", sf, 443));
+
+        return schemeRegistry;
+    }
+}
