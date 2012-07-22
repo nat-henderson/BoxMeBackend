@@ -5,10 +5,10 @@ import hackathon.boxme.register.DropBoxCredentials;
 import hackathon.boxme.register.RegisterAccount;
 
 public class RegistrationRequestHandler {
-	public void registerDropboxAccount(String facebookID, String accessToken,
+	public void registerDropboxAccount(String facebookID, String uid, String accessToken,
 			String secretKey) throws AccountNotSupportedException {
 		DropBoxCredentials creds = new DropBoxCredentials("dropbox",
-				facebookID, accessToken, secretKey);
+				uid, accessToken, secretKey);
 		RegisterAccount.main(facebookID, creds);
 	}
 }
