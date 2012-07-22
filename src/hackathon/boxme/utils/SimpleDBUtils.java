@@ -14,15 +14,15 @@ import com.xerox.amazonws.sdb.SDBResult;
 import com.xerox.amazonws.sdb.SimpleDB;
 
 public class SimpleDBUtils {
-   private static String AWS_PROPERTIES = "awscred.credentials";
+   //private static String AWS_PROPERTIES = "awscred.credentials";
  //  private static String AWS_ACCESSID = "accessKey";
   // private static String AWS_SECRETKEY = "secretKey";
    private static String domain_name = "summerofhack";
    private static SimpleDB simpleDB;
 
-	   
+	 
 	   static {
-
+/*
 	        //    get the accessid and secretkey strings from the properties file
 	           Properties props = new Properties();
 	           try {
@@ -31,6 +31,7 @@ public class SimpleDBUtils {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			*/
 /*
 	           String awsAccessId = props.getProperty(AWS_ACCESSID);
 	           String awsSecretKey = props.getProperty(AWS_SECRETKEY);
