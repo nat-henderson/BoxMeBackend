@@ -16,6 +16,7 @@ public class RegistrationRequestHandler {
 			String secretKey) throws AccountNotSupportedException {
 		DropBoxCredentials creds = new DropBoxCredentials("dropbox",
 				uid, accessToken, secretKey);
+		System.out.println(creds);
 		RegisterAccount.main(facebookID, creds);
 	}
 	public String getUrl(){
