@@ -120,8 +120,18 @@ public class DropboxStorageProvider implements StorageProvider {
 		}
 	}
 	
-	public static void main(String[] args) throws DropboxException{
-		DropboxStorageProvider dsp = new DropboxStorageProvider();
-		dsp.copyFile("/stupidraid", "97orcuffrgdgezb 7cn721muswzhhkp", "97orcuffrgdgezb 7cn721muswzhhkp");
+	@Override
+	public DirectoryListing getFilesUnderPath(String path, String credentials) {
+		DirectoryListing dl = new DirectoryListing();
+		AccessTokenPair token = processCredentials(credentials);
+        WebAuthSession session = new WebAuthSession(this.appKeyPair, Session.AccessType.DROPBOX, token);
+        DropboxAPI<?> client = new DropboxAPI<WebAuthSession>(session);
+		try {
+			Entry parent = client.metadata(path, 25000, null, true, null);
+		} catch (DropboxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dl;
 	}
 }

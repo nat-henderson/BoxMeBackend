@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class StorageServiceHandler {
 	/*
@@ -44,9 +43,10 @@ public class StorageServiceHandler {
 		return fileList;
 	}
 	
-	public String getFilesUnderPath(String userId, String path){
-		String allFiles = "";
-		
+	public DirectoryListing getFilesUnderPath(String userId, String path){
+		 DirectoryListing allFiles = null ;
+	
+			
 		return allFiles;
 	}
 	

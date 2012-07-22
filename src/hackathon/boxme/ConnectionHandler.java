@@ -31,10 +31,15 @@ public class ConnectionHandler implements Runnable {
 		BoxMeRequest request = null;
 		System.out.println(clientSocket.isClosed());
 		try {
-			String string = new BufferedReader(new InputStreamReader(
-					clientSocket.getInputStream())).readLine();
+			StringBuilder sb = new StringBuilder();
+			String string = "initialSet";
+			while (!string.equals("")) {
+				string = new BufferedReader(new InputStreamReader(
+						clientSocket.getInputStream())).readLine();
+				sb.append(string);
+			}
 
-			request = mapper.readValue(string, BoxMeRequest.class);
+			request = mapper.readValue(sb.toString(), BoxMeRequest.class);
 			System.out.println(clientSocket.isClosed());
 		} catch (IOException e) {
 			e.printStackTrace();
