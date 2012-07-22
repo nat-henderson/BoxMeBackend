@@ -35,7 +35,6 @@ public class DropboxStorageProvider implements StorageProvider {
 				fileKey += keys[i]; 
 			}
 		}
-		System.out.pr
 		AccessTokenPair token = processCredentials(receiverCredentials);
 		AppKeyPair pair = this.appKeyPair;
 		System.out.println("putFile");
