@@ -63,13 +63,14 @@ public class StorageServiceHandler {
 		if(accountType.equals(dropBoxType)){
 			//Make a new dropbox Storage Provider
 			storageProvider = new DropboxStorageProvider();
-			accountKey = accountType+userName;
+			accountKey = accountType+" "+userName;
 			accountTokens = accountCredentials.get(accountKey);
 			//String[] accountTokensList = accountTokens.split("\n");
 			
 			fileList = storageProvider.getFilesUnderPath(directoryPath, accountTokens);
 			fileList.insertPrefix(accountType+userName);
 		}
+
 		return fileList;
 	}
 				
@@ -144,7 +145,7 @@ public class StorageServiceHandler {
 	
 	private HashMap<String, String> getTestCreds(String userName){
 		HashMap<String, String> testDbCreds = new HashMap<String, String>();
-		testDbCreds.put("dropbox", testUserCreds);
+		testDbCreds.put("dropbox 12345", testUserCreds);
 		
 		return testDbCreds;
 	}
@@ -160,7 +161,14 @@ public class StorageServiceHandler {
 		receiverIds.add(receiver);
 		List<String> filestoSend= new ArrayList<String>();
 		filestoSend.add(file);
-		storageServiceHandler.putFiles(sender, filestoSend, receiverIds);
+		// storageServiceHandler.putFiles(sender, filestoSend, receiverIds);
+		DirectoryListing allNames = storageServiceHandler.getFilesUnderPath("dummy", "dropbox/12345");
+		for(String dir: allNames.getDirectories()){
+			System.out.println(dir);
+		}
+		for(String files: allNames.getFiles()){
+			System.out.println(files);
+		}
 	}
 
 }
