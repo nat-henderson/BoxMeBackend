@@ -31,12 +31,13 @@ public class ConnectionHandler implements Runnable {
 		BoxMeRequest request = null;
 		System.out.println(clientSocket.isClosed());
 		try {
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder("");
 			String string = "initialSet";
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					clientSocket.getInputStream()));
 			while (!string.equals("")) {
 				System.out.println(string);
-				string = new BufferedReader(new InputStreamReader(
-						clientSocket.getInputStream())).readLine();
+				string = reader.readLine();
 				sb.append(string);
 			}
 
