@@ -7,7 +7,6 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import hackathon.boxme.register.AccountNotSupportedException;
-import hackathon.boxme.register.DropBoxAuth;
 import hackathon.boxme.register.DropBoxCredentials;
 import hackathon.boxme.register.RegisterAccount;
 
