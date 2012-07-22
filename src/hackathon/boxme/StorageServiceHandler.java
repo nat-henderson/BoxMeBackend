@@ -1,5 +1,7 @@
 package hackathon.boxme;
 
+import hackathon.boxme.utils.SimpleDBUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +30,8 @@ public class StorageServiceHandler {
 	public String getFileList(String userId){
 		HashMap<String, String> accountCredentials = new HashMap<String, String>();
 		// Call to persistence store to get the account info
-		accountCredentials = getTestCreds(userId);
+		//accountCredentials = getTestCreds(userId);
+		accountCredentials = SimpleDBUtils.getAttributes(userId);
 		System.out.println(accountCredentials);
 		// Iterator through account credentials 
 		Iterator it = accountCredentials.entrySet().iterator();
@@ -37,7 +40,9 @@ public class StorageServiceHandler {
 			Map.Entry tokenPair = (Map.Entry) it.next();
 			String accountKey = (String) tokenPair.getKey();
 			String accountTokens = (String) tokenPair.getValue();
-			
+			if(!checkKey(accountKey)){
+				continue;
+			}
 			
 			if(accountKey.contains(dropBoxType)){
 				//Make a new dropbox Storage Provider
@@ -58,8 +63,8 @@ public class StorageServiceHandler {
 		String accountKey, accountTokens;
 		int hierarchyLevel;
 		// Call to persistence store to get the account info
-		accountCredentials = getTestCreds(userId);
-		System.out.println(accountCredentials);
+		//accountCredentials = getTestCreds(userId);
+		//System.out.println(accountCredentials);
 		// Iterator through account credentials 
 		String[] pathArray = path.split("/");	
 		hierarchyLevel = pathArray.length;
@@ -68,7 +73,9 @@ public class StorageServiceHandler {
 			//Call the Data store and get a list of service providers
 			List<String> serviceProviders = null, returnList = new ArrayList<String>();
 			Set<String> returnSet  = new HashSet<String>();
-			serviceProviders = getFromDbMock();
+			//serviceProviders = getFromDbMock();
+			//Simple DB Call
+			serviceProviders = SimpleDBUtils.getAttributeList(userId);
 			
 			for(String providerKeys: serviceProviders){
 				String provider = providerKeys.split(" ")[providerIndex];
@@ -83,7 +90,9 @@ public class StorageServiceHandler {
 		}else if(hierarchyLevel == 2){
 			//Call the Data store and get an account list for the service provider
 			List<String> serviceProviders = null , returnList  = new ArrayList<String>();
-			serviceProviders = getFromDbMock();
+			//serviceProviders = getFromDbMock();
+			//Simple DB Call
+			serviceProviders = SimpleDBUtils.getAttributeList(userId);
 			
 			String givenProvider = pathArray[providerPathIndex];
 			for(String providerKeys: serviceProviders){
@@ -103,7 +112,8 @@ public class StorageServiceHandler {
 				//Make a new dropbox Storage Provider
 				storageProvider = new DropboxStorageProvider();
 				accountKey = accountType+" "+userName;
-				accountTokens = accountCredentials.get(accountKey);
+				//accountTokens = accountCredentials.get(accountKey);
+				accountTokens = SimpleDBUtils.getAttribute(userId, accountKey);
 				//String[] accountTokensList = accountTokens.split("\n");
 				
 				fileList = storageProvider.getFilesUnderPath(directoryPath, accountTokens);
@@ -125,6 +135,8 @@ public class StorageServiceHandler {
 		HashMap<String, String> senderCredentials = new HashMap<String, String>();
 		// Call to persistence store to get the account info
 		senderCredentials = getTestCreds(senderUserId);
+		//Simple Db Call
+		senderCredentials = SimpleDBUtils.getAttributes(senderUserId);
 		Boolean transfer = false;
 		
 		for(String filetoSend: filestoSend){
@@ -138,6 +150,9 @@ public class StorageServiceHandler {
 				Map.Entry tokenPair = (Map.Entry) senderCredsIt.next();
 				String senderKey = (String) tokenPair.getKey();
 				String senderTokens = (String) tokenPair.getValue();
+				if(!checkKey(senderKey)){
+					continue;
+				}
 				if(senderKey.equals(accountType)){
 					// Now for each file have to go through receiver credentials 
 					// and then call a copy if both are dropbox 
@@ -148,6 +163,9 @@ public class StorageServiceHandler {
 						HashMap<String, String> receiverCredentials = new HashMap<String, String>();
 						
 						receiverCredentials = getTestCreds(receiverId);
+						//Simple Db Call
+						receiverCredentials = SimpleDBUtils.getAttributes(receiverId);
+						
 						Iterator receiverCredsIt = receiverCredentials.entrySet().iterator();
 						while(receiverCredsIt.hasNext()){
 							Map.Entry receiverTokenPair = (Map.Entry) receiverCredsIt.next();
@@ -155,6 +173,9 @@ public class StorageServiceHandler {
 							String receiverTokens = (String) tokenPair.getValue();
 							if(senderKey.contains(dropBoxType) && receiverKey.contains(dropBoxType)){
 								// if both accounts are Dropbox
+								if(!checkKey(receiverKey)){
+									continue;
+								}
 								storageProvider = new DropboxStorageProvider();
 								String[] fileNamesToSend = filetoSend.split("/");
 								String fileNametoSend = "/";
@@ -182,6 +203,16 @@ public class StorageServiceHandler {
 			accountType = dropBoxType;
 		}
 		return accountType;
+	}
+	
+	private Boolean checkKey(String key){
+		Boolean flag = false;
+		for(String providers: providerList){
+			if(key.contains(providers)){
+				flag = true;
+			}
+		}
+		return flag;
 	}
 	
 	private HashMap<String, String> getTestCreds(String userName){
