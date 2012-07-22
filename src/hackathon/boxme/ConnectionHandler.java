@@ -41,6 +41,7 @@ public class ConnectionHandler implements Runnable {
 				sb.append(string);
 			}
 
+			System.out.println(sb.toString());
 			request = mapper.readValue(sb.toString(), BoxMeRequest.class);
 			System.out.println(clientSocket.isClosed());
 		} catch (IOException e) {
