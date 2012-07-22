@@ -31,8 +31,6 @@ public class SimpleDBUtils {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			*/
-/*
 	           String awsAccessId = props.getProperty(AWS_ACCESSID);
 	           String awsSecretKey = props.getProperty(AWS_SECRETKEY);
 	           */
