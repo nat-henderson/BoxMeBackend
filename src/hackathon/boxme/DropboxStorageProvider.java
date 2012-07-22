@@ -71,6 +71,7 @@ public class DropboxStorageProvider implements StorageProvider {
 				fileKey += keys[i]; 
 			}
 		}
+		System.out.println(fileKey);
 		return copyFile(fileKey, senderCredentials, fileKey, receiverCredentials);
 	}
 
