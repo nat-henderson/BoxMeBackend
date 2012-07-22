@@ -8,6 +8,7 @@ import java.util.List;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session;
@@ -53,20 +54,34 @@ public class DropboxStorageProvider implements StorageProvider {
 	@Override
 	public boolean copyFile(String fileKey, String senderCredentials,
 			String receiverCredentials) {
+		return copyFile(fileKey, senderCredentials, fileKey, receiverCredentials);
+	}
+
+	private boolean copyFile(String senderFileKey, String senderCredentials,
+			String receiverFileKey, String receiverCredentials) {
 		try {
 			AccessTokenPair sender = processCredentials(senderCredentials);
 	        // Connect to the <source> UID and create a copy-ref.
 	        WebAuthSession sourceSession = new WebAuthSession(this.appKeyPair, Session.AccessType.DROPBOX, sender);
 	        DropboxAPI<?> sourceClient = new DropboxAPI<WebAuthSession>(sourceSession);
-	        DropboxAPI.CreatedCopyRef cr = sourceClient.createCopyRef(fileKey);
+	        DropboxAPI.CreatedCopyRef cr = sourceClient.createCopyRef(senderFileKey);
 	
         	AccessTokenPair receiver = processCredentials(receiverCredentials);
 	        WebAuthSession targetSession = new WebAuthSession(this.appKeyPair, Session.AccessType.DROPBOX, receiver);
 	        DropboxAPI<?> targetClient = new DropboxAPI<WebAuthSession>(targetSession);
-	        targetClient.addFromCopyRef(cr.copyRef, fileKey);
+	        targetClient.addFromCopyRef(cr.copyRef, receiverFileKey);
 	        return true;
 		} catch (DropboxException e) {
 			e.printStackTrace();
+			if (e instanceof DropboxServerException) {
+				DropboxServerException e1 = (DropboxServerException)e;
+				if (e1.toString().endsWith("already exists.)")) {
+					int lastDot = receiverFileKey.lastIndexOf('.');
+					String newReceiver = receiverFileKey.substring(0, lastDot)
+							+ "(copy)" + receiverFileKey.substring(lastDot);
+					return copyFile(senderFileKey, senderCredentials, newReceiver, receiverCredentials);
+				}
+			}
 			return false;
 		}
 	}
@@ -103,26 +118,7 @@ public class DropboxStorageProvider implements StorageProvider {
 	}
 	
 	public static void main(String[] args) throws DropboxException{
-		DropboxStorageProvider dsp = new DropboxStorageProvider();
-/*        WebAuthSession was = new WebAuthSession(dsp.appKeyPair, Session.AccessType.APP_FOLDER);
-        WebAuthSession.WebAuthInfo info = was.getAuthInfo();
-        System.out.println("1. Go to: " + info.url);
-        System.out.println("2. Allow access to this app.");
-        System.out.println("3. Press ENTER.");
-
-        try {
-            while (System.in.read() != '\n') {}
-        }
-        catch (IOException ex) {
-        	
-        }
-
-     //    This will fail if the user didn't visit the above URL and hit 'Allow'.
-        String uid = was.retrieveWebAccessToken(info.requestTokenPair);
-        AccessTokenPair accessToken = was.getAccessTokenPair();
-        System.out.println(accessToken.key + " " + accessToken.secret);
-*/
-		FileCopyStream file = dsp.getFile("/urls.txt", "97orcuffrgdgezb 7cn721muswzhhkp");
-		dsp.putFile("urlscopy.txt", file, "97orcuffrgdgezb 7cn721muswzhhkp");
+//		DropboxStorageProvider dsp = new DropboxStorageProvider();
+//		dsp.copyFile("/urls.txt", "97orcuffrgdgezb 7cn721muswzhhkp", "97orcuffrgdgezb 7cn721muswzhhkp");
 	}
 }
