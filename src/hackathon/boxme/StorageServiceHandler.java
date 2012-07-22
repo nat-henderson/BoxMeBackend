@@ -17,6 +17,8 @@ public class StorageServiceHandler {
 	int accountDeciderColumn = 0; // Keeping it 0 for now
 	String dropBoxAccount = "dropbox";
 	String testUserCreds = "97orcuffrgdgezb 7cn721muswzhhkp";
+	int dropBoxIndex = 0;
+	int userNameIndex = 1;
 	
 	public String getFileList(String userId){
 		HashMap<String, String> accountCredentials = new HashMap<String, String>();
@@ -32,7 +34,7 @@ public class StorageServiceHandler {
 			String accountTokens = (String) tokenPair.getValue();
 			
 			
-			if(accountKey.equals(dropBoxType)){
+			if(accountKey.contains(dropBoxType)){
 				//Make a new dropbox Storage Provider
 				storageProvider = new DropboxStorageProvider(); 
 				String[] accountTokensList = accountTokens.split("\n");
@@ -45,11 +47,34 @@ public class StorageServiceHandler {
 	}
 	
 	public DirectoryListing getFilesUnderPath(String userId, String path){
-		 DirectoryListing allFiles = null ;
-	
+		DirectoryListing allFiles = null, fileList = null ;
+		String directoryPath = "";
+		HashMap<String, String> accountCredentials = new HashMap<String, String>();
+		String accountKey, accountTokens;
+		// Call to persistence store to get the account info
+		accountCredentials = getTestCreds(userId);
+		System.out.println(accountCredentials);
+		// Iterator through account credentials 
 			
-		return allFiles;
+		
+		String accountType = path.split("/")[dropBoxIndex];
+		String userName = path.split("/")[userNameIndex];
+			 
+			
+		if(accountType.equals(dropBoxType)){
+			//Make a new dropbox Storage Provider
+			storageProvider = new DropboxStorageProvider();
+			accountKey = accountType+userName;
+			accountTokens = accountCredentials.get(accountKey);
+			//String[] accountTokensList = accountTokens.split("\n");
+			
+			fileList = storageProvider.getFilesUnderPath(directoryPath, accountTokens);
+			
+		}
+		return fileList;
 	}
+				
+			
 	
 	/*
 	 * send the list of files from the user file list to list of users 
@@ -87,7 +112,7 @@ public class StorageServiceHandler {
 							Map.Entry receiverTokenPair = (Map.Entry) receiverCredsIt.next();
 							String receiverKey = (String) tokenPair.getKey();
 							String receiverTokens = (String) tokenPair.getValue();
-							if(senderKey.equals(dropBoxType) && receiverKey.equals(dropBoxType)){
+							if(senderKey.contains(dropBoxType) && receiverKey.contains(dropBoxType)){
 								// if both accounts are Dropbox
 								storageProvider = new DropboxStorageProvider();
 								String[] fileNamesToSend = filetoSend.split("/");
