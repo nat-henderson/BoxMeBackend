@@ -13,6 +13,9 @@
         <javac srcdir="src" destdir="build/classes">
             <classpath refid="classpath" />
         </javac>
+        <copy todir="build/resources" >
+            <fileset dir="src" includes="awscred.credentials" />
+        </copy>
     </target>
 
     <property name="one-jar.dist.dir" value="lib/"/> 
@@ -22,6 +25,7 @@
         <one-jar destfile="build/jar/BoxMeBackend.jar" onejarmainclass="hackathon.boxme.RequestHandler">
         <main>
             <fileset dir="build/classes"/>
+            <fileset file="build/awscreds.credentials" />
         </main>
         <lib>
             <fileset dir="lib" includes="**/*.jar"/>
