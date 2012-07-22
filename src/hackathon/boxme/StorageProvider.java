@@ -9,7 +9,7 @@ public interface StorageProvider {
 	/*
 	 * Copy the file input stream to list of users given their credentials
 	 */
-	public void putFile(FileInputStream inputStream, List<String> receiverCredentials);
+	public void putFile(FileInputStream inputStream, String receiverCredentials);
 	
 	/*
 	 *  Get the file output stream to list of users given sender credentials
