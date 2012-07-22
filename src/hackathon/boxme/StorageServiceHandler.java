@@ -70,7 +70,7 @@ public class StorageServiceHandler {
 		return fileList;
 	}
 	
-	public String getFilesUnderPath(String userId, String path){
+	public DirectoryListing  getFilesUnderPath(String userId, String path){
 		DirectoryListing allFiles = null, fileList = new DirectoryListing() ;
 		String directoryPath = "";
 		HashMap<String, String> accountCredentials = new HashMap<String, String>();
@@ -154,7 +154,7 @@ public class StorageServiceHandler {
 		
 		// Convert to Json 
 		
-		
+		/*
 		ObjectMapper mapper = new ObjectMapper();
 		//JsonGenerator gen= new JsonGene;
 		String jsonReturn = null;
@@ -170,7 +170,8 @@ public class StorageServiceHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return jsonReturn;
+		*/
+		return fileList;
 	}
 				
 			
@@ -330,10 +331,10 @@ public class StorageServiceHandler {
 		List<String> filestoSend= new ArrayList<String>();
 		filestoSend.add(file);
 		//storageServiceHandler.putFiles(sender, filestoSend, receiverIds);
-		String allNames = storageServiceHandler.getFilesUnderPath("vtest", "/dropbox/");
-		System.out.println(allNames);
-		/*
-		 *if(allNames.getDirectories()!=null){
+		DirectoryListing allNames = storageServiceHandler.getFilesUnderPath("vtest4", "/dropbox/");
+		//System.out.println(allNames);
+		
+		 if(allNames.getDirectories()!=null){
 			for(String dir: allNames.getDirectories()){
 				System.out.println(dir);
 			}
@@ -343,7 +344,7 @@ public class StorageServiceHandler {
 				System.out.println(files);
 			}
 		}
-		*/
+		
 	}
 
 }
