@@ -19,26 +19,4 @@ public class RegistrationRequestHandler {
 		System.out.println(creds);
 		RegisterAccount.main(facebookID, creds);
 	}
-	public String getUrl(){
-		ObjectMapper mapper = new ObjectMapper();
-		String authUrl = DropBoxAuth.getUrl();
-		String jsonReturn = null;
-		try {
-			jsonReturn = mapper.writeValueAsString(authUrl);
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return jsonReturn;
-	}
-	
-	public void getTokens(String facebookID){
-		DropBoxAuth.getTokens(facebookID);
-	}
 }
