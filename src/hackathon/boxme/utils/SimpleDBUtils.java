@@ -15,8 +15,8 @@ import com.xerox.amazonws.sdb.SimpleDB;
 
 public class SimpleDBUtils {
    private static String AWS_PROPERTIES = "awscred.credentials";
-   private static String AWS_ACCESSID = "accessKey";
-   private static String AWS_SECRETKEY = "secretKey";
+ //  private static String AWS_ACCESSID = "accessKey";
+  // private static String AWS_SECRETKEY = "secretKey";
    private static String domain_name = "summerofhack";
    private static SimpleDB simpleDB;
 
@@ -31,9 +31,12 @@ public class SimpleDBUtils {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+/*
 	           String awsAccessId = props.getProperty(AWS_ACCESSID);
 	           String awsSecretKey = props.getProperty(AWS_SECRETKEY);
+	           */
+			String awsAccessId = "AKIAIBZWUXL2WLB6ANUA";
+			String awsSecretKey = "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";
 
 	           if ((awsAccessId == null || awsAccessId.trim().length() == 0) ||
 	               (awsSecretKey == null || awsSecretKey.trim().length() == 0))
