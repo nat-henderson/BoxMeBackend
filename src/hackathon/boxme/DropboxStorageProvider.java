@@ -123,11 +123,22 @@ public class DropboxStorageProvider implements StorageProvider {
 	@Override
 	public DirectoryListing getFilesUnderPath(String path, String credentials) {
 		DirectoryListing dl = new DirectoryListing();
+		List<String> dirs = new LinkedList<String>();
+		List<String> files = new LinkedList<String>();
 		AccessTokenPair token = processCredentials(credentials);
         WebAuthSession session = new WebAuthSession(this.appKeyPair, Session.AccessType.DROPBOX, token);
         DropboxAPI<?> client = new DropboxAPI<WebAuthSession>(session);
 		try {
 			Entry parent = client.metadata(path, 25000, null, true, null);
+			for (Entry child : parent.contents) {
+				if (child.isDir) {
+					dirs.add(child.path);
+				} else {
+					files.add(child.path);
+				}
+			}
+			dl.setDirectories(dirs);
+			dl.setFiles(files);
 		} catch (DropboxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
