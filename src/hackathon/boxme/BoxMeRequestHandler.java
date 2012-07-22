@@ -30,11 +30,11 @@ public class BoxMeRequestHandler {
 	 */
 	public String handle(BoxMeRequest request) throws NoSuchMethodException {
 		String handledOutput = null;
-		handledOutput = tryToHandle(request, storageServiceApis);
+		handledOutput = tryToHandle(request, storageServiceApis, new StorageServiceHandler());
 		if (handledOutput != null) {
 			return handledOutput;
 		}
-		handledOutput = tryToHandle(request, registrationRequestApis);
+		handledOutput = tryToHandle(request, registrationRequestApis, new RegistrationRequestHandler());
 		if (handledOutput != null) {
 			return handledOutput;
 		}
@@ -42,18 +42,20 @@ public class BoxMeRequestHandler {
 	}
 
 	private String tryToHandle(BoxMeRequest request,
-			List<Method> handlers) {
+			List<Method> handlers, Object invokeUpon) {
 		for (Method m : handlers) {
 			if (m.getName().equals(request.requestType)) {
 				Object retVal = null;
 				try {
-					retVal = m.invoke(new StorageServiceHandler(), request.requestParameters);
+					retVal = m.invoke(invokeUpon, request.requestParameters);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				ObjectMapper mapper = new ObjectMapper();
 				try {
-					return mapper.writeValueAsString(retVal);
+					String s = mapper.writeValueAsString(retVal);
+					System.out.println(s);
+					return s;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

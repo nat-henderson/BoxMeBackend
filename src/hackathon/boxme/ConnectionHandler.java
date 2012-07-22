@@ -41,6 +41,7 @@ public class ConnectionHandler implements Runnable {
 				sb.append(string);
 			}
 
+			System.out.println(sb.toString());
 			request = mapper.readValue(sb.toString(), BoxMeRequest.class);
 			System.out.println(clientSocket.isClosed());
 		} catch (IOException e) {
@@ -57,9 +58,10 @@ public class ConnectionHandler implements Runnable {
 					handler.handle(request).getBytes());
 			clientSocket.getOutputStream().flush();
 			clientSocket.close();
-		} catch (NoSuchMethodException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			clientSocket.getOutputStream().write(e.toString().getBytes());
+			clientSocket.getOutputStream().close();
 		}
 	}
 }
