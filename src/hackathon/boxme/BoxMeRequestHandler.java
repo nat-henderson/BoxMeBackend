@@ -53,7 +53,9 @@ public class BoxMeRequestHandler {
 				}
 				ObjectMapper mapper = new ObjectMapper();
 				try {
-					return mapper.writeValueAsString(retVal);
+					String s = mapper.writeValueAsString(retVal);
+					System.out.println(s);
+					return s;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
