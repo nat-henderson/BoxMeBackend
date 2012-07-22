@@ -1,7 +1,5 @@
 package hackathon.boxme;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -140,7 +138,6 @@ public class DropboxStorageProvider implements StorageProvider {
 			dl.setDirectories(dirs);
 			dl.setFiles(files);
 		} catch (DropboxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return dl;
