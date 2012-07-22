@@ -25,6 +25,7 @@ public class DropboxStorageProvider implements StorageProvider {
 
 	@Override
 	public void putFile(String fileKey, FileCopyStream stream, String receiverCredentials) {
+<<<<<<< HEAD
 		System.out.println(fileKey);
 		String[] keys = fileKey.split(" ");
 		if (keys.length == 2) {
@@ -35,6 +36,8 @@ public class DropboxStorageProvider implements StorageProvider {
 				fileKey += keys[i]; 
 			}
 		}
+=======
+>>>>>>> parent of 02ccce9... demo?
 		AccessTokenPair token = processCredentials(receiverCredentials);
 		AppKeyPair pair = this.appKeyPair;
 		System.out.println("putFile");
