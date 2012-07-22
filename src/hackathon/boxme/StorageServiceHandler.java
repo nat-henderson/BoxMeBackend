@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.services.drive.model.FileList;
-
 public class StorageServiceHandler {
 	/*
 	 * Returns a list of file for the user given the 
