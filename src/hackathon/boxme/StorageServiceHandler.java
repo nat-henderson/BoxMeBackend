@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.services.drive.model.FileList;
 
 public class StorageServiceHandler {
 	/*
@@ -47,9 +44,10 @@ public class StorageServiceHandler {
 		return fileList;
 	}
 	
-	public String getFilesUnderPath(String userId, String path){
-		String allFiles = "";
-		
+	public DirectoryListing getFilesUnderPath(String userId, String path){
+		 DirectoryListing allFiles = null ;
+	
+			
 		return allFiles;
 	}
 	
