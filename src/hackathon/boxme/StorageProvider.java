@@ -16,6 +16,10 @@ public interface StorageProvider {
 	 */
 	public FileCopyStream getFile(String fileKey, String senderCredentials);
 	
+	/*
+	 * 
+	 */
+	public DirectoryListing getFilesUnderPath(String path, String credentials);
 	
 	/*
 	 *  copyFiles between a sender and a receiver
