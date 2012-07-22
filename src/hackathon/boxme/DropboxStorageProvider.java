@@ -1,7 +1,5 @@
 package hackathon.boxme;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -120,8 +118,28 @@ public class DropboxStorageProvider implements StorageProvider {
 		}
 	}
 	
-	public static void main(String[] args) throws DropboxException{
-		DropboxStorageProvider dsp = new DropboxStorageProvider();
-		dsp.copyFile("/stupidraid", "97orcuffrgdgezb 7cn721muswzhhkp", "97orcuffrgdgezb 7cn721muswzhhkp");
+	@Override
+	public DirectoryListing getFilesUnderPath(String path, String credentials) {
+		DirectoryListing dl = new DirectoryListing();
+		List<String> dirs = new LinkedList<String>();
+		List<String> files = new LinkedList<String>();
+		AccessTokenPair token = processCredentials(credentials);
+        WebAuthSession session = new WebAuthSession(this.appKeyPair, Session.AccessType.DROPBOX, token);
+        DropboxAPI<?> client = new DropboxAPI<WebAuthSession>(session);
+		try {
+			Entry parent = client.metadata(path, 25000, null, true, null);
+			for (Entry child : parent.contents) {
+				if (child.isDir) {
+					dirs.add(child.path);
+				} else {
+					files.add(child.path);
+				}
+			}
+			dl.setDirectories(dirs);
+			dl.setFiles(files);
+		} catch (DropboxException e) {
+			e.printStackTrace();
+		}
+		return dl;
 	}
 }
