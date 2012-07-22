@@ -88,6 +88,28 @@ public class SimpleDBUtils {
 	      return attrs;
 	   }
 	   
+	   public static List<String> getAttributeList(String item) {
+		   List<ItemAttribute> attrs = new ArrayList<ItemAttribute>();
+		   List<String> result = new ArrayList<String>();
+		   try{
+		   	  Domain dom = simpleDB.getDomain(domain_name);
+	          Item i = dom.getItem(item);
+	          
+	          attrs = i.getAttributes();
+	          for (ItemAttribute attr : attrs) {
+	              result.add(attr.getName());
+	          }
+
+	      } catch (SDBException ex) {
+	          System.err.println("message : " + ex.getMessage());
+	          System.err.println("requestID : " + ex.getRequestId());
+	      } catch (Exception e) {
+	              System.err.println("Error occured: " + e.getMessage());
+	              e.printStackTrace();
+	      }
+	      return result;
+	   }
+	   
 	   public static String getAttribute(String item, String attribute) {
 		   String result = "";
 		   try{
