@@ -34,6 +34,7 @@ public class ConnectionHandler implements Runnable {
 			StringBuilder sb = new StringBuilder();
 			String string = "initialSet";
 			while (!string.equals("")) {
+				System.out.println(string);
 				string = new BufferedReader(new InputStreamReader(
 						clientSocket.getInputStream())).readLine();
 				sb.append(string);
