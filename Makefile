@@ -1,4 +1,4 @@
-CLASSPATH := lib/jackson-core-2.0.4.jar:lib/jackson-databind-2.0.4.jar
+CLASSPATH := lib/jackson-core-2.0.4.jar:lib/jackson-databind-2.0.4.jar:lib/jackson-annotations-2.0.4.jar:lib/dropbox-java-sdk-1.3.1/lib/dropbox-java-sdk-1.3.1.jar:src/hackathon/boxme/
 
 ifneq ($(CLASSPATH),)
         classpath:=  $(CLASSPATH):$(classpath)
@@ -20,3 +20,6 @@ classes:
 
 clean: 
 	rm src/hackathon/boxme/*.class
+
+run:
+	java -cp ${classpath} RequestHandler

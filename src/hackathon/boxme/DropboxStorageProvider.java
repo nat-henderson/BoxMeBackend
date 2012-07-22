@@ -77,8 +77,11 @@ public class DropboxStorageProvider implements StorageProvider {
 				DropboxServerException e1 = (DropboxServerException)e;
 				if (e1.toString().endsWith("already exists.)")) {
 					int lastDot = receiverFileKey.lastIndexOf('.');
-					String newReceiver = receiverFileKey.substring(0, lastDot)
-							+ "(copy)" + receiverFileKey.substring(lastDot);
+					String newReceiver = receiverFileKey + "(copy)";
+					if (lastDot >= 0) {
+						newReceiver = receiverFileKey.substring(0, lastDot)
+								+ "(copy)" + receiverFileKey.substring(lastDot);
+					}
 					return copyFile(senderFileKey, senderCredentials, newReceiver, receiverCredentials);
 				}
 			}
@@ -118,7 +121,7 @@ public class DropboxStorageProvider implements StorageProvider {
 	}
 	
 	public static void main(String[] args) throws DropboxException{
-//		DropboxStorageProvider dsp = new DropboxStorageProvider();
-//		dsp.copyFile("/urls.txt", "97orcuffrgdgezb 7cn721muswzhhkp", "97orcuffrgdgezb 7cn721muswzhhkp");
+		DropboxStorageProvider dsp = new DropboxStorageProvider();
+		dsp.copyFile("/stupidraid", "97orcuffrgdgezb 7cn721muswzhhkp", "97orcuffrgdgezb 7cn721muswzhhkp");
 	}
 }

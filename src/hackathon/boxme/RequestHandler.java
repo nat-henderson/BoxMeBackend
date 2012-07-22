@@ -10,7 +10,7 @@ public class RequestHandler {
 		int socketNum = 9125;
 		try {
 			socketNum = Integer.parseInt(args[0]);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			// no one cares about that; use default.
 		}
 		ServerSocket socket = null;

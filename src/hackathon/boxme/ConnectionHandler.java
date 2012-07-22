@@ -1,6 +1,9 @@
 package hackathon.boxme;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,8 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ConnectionHandler implements Runnable {
 	Socket clientSocket = null;
 
-	public ConnectionHandler(Socket clientSocket) {
+	public ConnectionHandler(Socket clientSocket) throws IOException {
 		this.clientSocket = clientSocket;
+		System.out.println(this.clientSocket.isClosed());
 	}
 
 	@Override
@@ -17,34 +21,38 @@ public class ConnectionHandler implements Runnable {
 		try {
 			doWork();
 		} catch (IOException e) {
-			System.out.println(e.toString());
+			e.printStackTrace();
 		}
 	}
-	
+
 	public void doWork() throws IOException {
 		// TODO Auto-generated method stub
 		ObjectMapper mapper = new ObjectMapper();
 		BoxMeRequest request = null;
+		System.out.println(clientSocket.isClosed());
 		try {
-			request = mapper.readValue(clientSocket.getInputStream(),
-					BoxMeRequest.class);
+			String string = new BufferedReader(new InputStreamReader(
+					clientSocket.getInputStream())).readLine();
+
+			request = mapper.readValue(string, BoxMeRequest.class);
+			System.out.println(clientSocket.isClosed());
 		} catch (IOException e) {
-			clientSocket.getOutputStream().write(
-					"Invalid Input.".getBytes());
+			e.printStackTrace();
+			clientSocket.getOutputStream().write("Invalid Input.".getBytes());
 			clientSocket.getOutputStream().flush();
 			clientSocket.close();
 			return;
 		}
 		BoxMeRequestHandler handler = new BoxMeRequestHandler();
-		
+		System.out.println(clientSocket.isClosed());
 		try {
 			clientSocket.getOutputStream().write(
 					handler.handle(request).getBytes());
-		} catch (NoSuchMethodException e) {
-			clientSocket.getOutputStream().write(e.toString().getBytes());
-		} finally {
 			clientSocket.getOutputStream().flush();
 			clientSocket.close();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+			clientSocket.getOutputStream().write(e.toString().getBytes());
 		}
 	}
 }
