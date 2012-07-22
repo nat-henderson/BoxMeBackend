@@ -57,9 +57,10 @@ public class ConnectionHandler implements Runnable {
 					handler.handle(request).getBytes());
 			clientSocket.getOutputStream().flush();
 			clientSocket.close();
-		} catch (NoSuchMethodException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			clientSocket.getOutputStream().write(e.toString().getBytes());
+			clientSocket.getOutputStream().close();
 		}
 	}
 }
