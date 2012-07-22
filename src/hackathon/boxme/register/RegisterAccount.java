@@ -4,7 +4,7 @@ import hackathon.boxme.utils.SimpleDBUtils;
 
 public class RegisterAccount {
 	
-	public static boolean register(String user,Credentials credentials) throws AccountNotSupportedException{
+	public static boolean main(String user,Credentials credentials) throws AccountNotSupportedException{
 		boolean result = false;
 		if(credentials.getType().equalsIgnoreCase("dropbox")){
 			DropBoxCredentials dbCredentials = (DropBoxCredentials) credentials;
