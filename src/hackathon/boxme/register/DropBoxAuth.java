@@ -46,7 +46,7 @@ public class DropBoxAuth {
 		}
 		Credentials creds = new DropBoxCredentials("dropbox", facebookid, session.getAccessTokenPair().key, session.getAccessTokenPair().secret);
 		try {
-			boolean result = RegisterAccount.register("dummy", creds);
+			boolean result = RegisterAccount.main("dummy", creds);
 		} catch (AccountNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
