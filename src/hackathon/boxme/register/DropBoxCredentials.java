@@ -20,8 +20,8 @@ public class DropBoxCredentials extends Credentials {
 		this.secret_key = secret;
 	}
 	
-	public DropBoxCredentials(String type, String facebookId, String access_token, String secret_key) {
-		super(type,facebookId);
+	public DropBoxCredentials(String type, String userId, String access_token, String secret_key) {
+		super(type,userId);
 		this.access_token = access_token;
 		this.secret_key = secret_key;
 	}
