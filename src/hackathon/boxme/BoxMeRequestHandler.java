@@ -42,7 +42,7 @@ public class BoxMeRequestHandler {
 	}
 
 	private String tryToHandle(BoxMeRequest request,
-			List<Method> handlers) throws NoSuchMethodException {
+			List<Method> handlers) {
 		for (Method m : handlers) {
 			if (m.getName().equals(request.requestType)) {
 				Object retVal = null;
