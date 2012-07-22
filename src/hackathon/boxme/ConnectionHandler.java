@@ -2,8 +2,6 @@ package hackathon.boxme;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -16,6 +14,14 @@ public class ConnectionHandler implements Runnable {
 
 	@Override
 	public void run() {
+		try {
+			doWork();
+		} catch (IOException e) {
+			System.out.println(e.toString());
+		}
+	}
+	
+	public void doWork() throws IOException {
 		// TODO Auto-generated method stub
 		ObjectMapper mapper = new ObjectMapper();
 		BoxMeRequest request = null;
@@ -23,28 +29,18 @@ public class ConnectionHandler implements Runnable {
 			request = mapper.readValue(clientSocket.getInputStream(),
 					BoxMeRequest.class);
 		} catch (IOException e) {
-			try {
-				this.clientSocket.getOutputStream().write(
-						"Invalid Input.".getBytes());
-				this.clientSocket.close();
-			} catch (IOException e1) {
-				// not much we can do.
-			}
+			clientSocket.getOutputStream().write(
+					"Invalid Input.".getBytes());
+			clientSocket.getOutputStream().flush();
+			clientSocket.close();
 			return;
 		}
-		List<BoxMeRequestHandler> handlers = new ArrayList<BoxMeRequestHandler>();
-		// handlers.add(YourClass.class);
-		for (BoxMeRequestHandler handler : handlers) {
-			if (handler.handles(request.requestType)) {
-				try {
-					clientSocket.getOutputStream().write(
-							handler.handle(request).getBytes());
-					break;
-				} catch (IOException e) {
-					// look for something else to handle this.
-				}
-			}
-		}
+		BoxMeRequestHandler handler = new BoxMeRequestHandler();
+		
+		clientSocket.getOutputStream().write(
+				handler.handle(request).getBytes());
+		clientSocket.getOutputStream().flush();
+		clientSocket.close();
+		return;
 	}
-
 }
