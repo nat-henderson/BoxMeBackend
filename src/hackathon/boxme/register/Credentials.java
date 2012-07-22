@@ -2,11 +2,11 @@ package hackathon.boxme.register;
 
 public class Credentials {
 	private String Type;
-	private String FacebookId;
+	private String UserId;
 	
-	public Credentials(String type, String FacebookId) {
+	public Credentials(String type, String UserId) {
 		this.Type = type;
-		this.FacebookId = FacebookId;
+		this.UserId = UserId;
 	}
 	
 	public String getType(){
@@ -18,15 +18,11 @@ public class Credentials {
 	}
 	
 	
-	public String getFacebookId(){
-		return Type;
+	public String getUserId(){
+		return UserId;
 	}
 	
-	public void setFacebook(String type){
-		this.Type = type;
-	}
-
-	public void setFacebookId(String facebookId) {
-		FacebookId = facebookId;
+	public void setUserId(String UserId){
+		this.UserId= UserId;
 	}
 }

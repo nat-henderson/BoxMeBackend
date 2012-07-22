@@ -4,7 +4,7 @@ import hackathon.boxme.utils.SimpleDBUtils;
 
 public class RegisterAccount {
 	
-	public static boolean main(String user,Credentials credentials) throws AccountNotSupportedException{
+	public static boolean register(String user,Credentials credentials) throws AccountNotSupportedException{
 		boolean result = false;
 		if(credentials.getType().equalsIgnoreCase("dropbox")){
 			DropBoxCredentials dbCredentials = (DropBoxCredentials) credentials;
@@ -20,13 +20,13 @@ public class RegisterAccount {
 		return result;
 	}
 
-	private static boolean RegisterDropBoxAccount(String user, DropBoxCredentials dbCredentials) {
-		SimpleDBUtils.insert(dbCredentials.getFacebookId(), "dropbox "+user, dbCredentials.getAccessToken()+" "+dbCredentials.getSecretKey());
+	private static boolean RegisterDropBoxAccount(String FacebookId, DropBoxCredentials dbCredentials) {
+		SimpleDBUtils.insert(FacebookId, "dropbox "+dbCredentials.getUserId(), dbCredentials.getAccessToken()+" "+dbCredentials.getSecretKey());
 		return true;		
 	}
 	
-	private static boolean RegisterGoogleAccount(String user, GoogleCredentials dbCredentials) {
-		SimpleDBUtils.insert(dbCredentials.getFacebookId(), "google "+user, dbCredentials.getAccessToken()+" "+dbCredentials.getSecretKey());
+	private static boolean RegisterGoogleAccount(String GoogleId, GoogleCredentials dbCredentials) {
+		SimpleDBUtils.insert(GoogleId, "google "+dbCredentials.getUserId(), dbCredentials.getAccessToken()+" "+dbCredentials.getSecretKey());
 		return true;		
 	}
 

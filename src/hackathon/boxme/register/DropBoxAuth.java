@@ -34,7 +34,7 @@ public class DropBoxAuth {
 	private static AccessTokenPair tokenPair;
 	
 	
-	public static void getTokens(String facebookid){
+	public static void gettokens(String facebookid){
 
 		RequestTokenPair tokens = new RequestTokenPair(tokenPair.key, tokenPair.secret);
 
@@ -46,16 +46,14 @@ public class DropBoxAuth {
 		}
 		Credentials creds = new DropBoxCredentials("dropbox", facebookid, session.getAccessTokenPair().key, session.getAccessTokenPair().secret);
 		try {
-			// How to get the UID here ??
-			String uId = "dummy";
-			boolean result = RegisterAccount.main(uId, creds);
+			boolean result = RegisterAccount.register("dummy", creds);
 		} catch (AccountNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	public static String getUrl() {
+	public static String geturl() {
 		appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
 		session = new WebAuthSession(appKeys,ACCESS_TYPE);
 		mDBApi = new DropboxAPI<WebAuthSession>(session);

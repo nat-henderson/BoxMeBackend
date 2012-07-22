@@ -26,11 +26,4 @@ public class DropBoxCredentials extends Credentials {
 		this.secret_key = secret_key;
 	}
 
-	@Override
-	public String toString() {
-		return "DropBoxCredentials [access_token=" + access_token
-				+ ", secret_key=" + secret_key + ", getType()=" + getType()
-				+ ", getFacebookId()=" + getFacebookId() + "]";
-	}
-
 }
