@@ -16,6 +16,7 @@ public class StorageServiceHandler {
 	 * userId 
 	 */
 	String dropBoxType = "dropbox";
+	String S3Type = "S3";
 	List<String> providerList = new ArrayList<String>();
 	StorageProvider storageProvider;
 	int accountDeciderColumn = 0; // Keeping it 0 for now
@@ -134,6 +135,7 @@ public class StorageServiceHandler {
 	public boolean putFiles(String senderUserId, List<String> filestoSend , List<String> receiverUserIds ){
 		
 		HashMap<String, String> senderCredentials = new HashMap<String, String>();
+		StorageProvider receiverStorageProvider;
 		// Call to persistence store to get the account info
 		senderCredentials = getTestCreds(senderUserId);
 		//Simple Db Call
@@ -174,20 +176,51 @@ public class StorageServiceHandler {
 							Map.Entry receiverTokenPair = (Map.Entry) receiverCredsIt.next();
 							String receiverKey = (String) tokenPair.getKey();
 							String receiverTokens = (String) tokenPair.getValue();
+							if(!checkKey(receiverKey)){
+								continue;
+							}
+							
 							if(senderKey.contains(dropBoxType) && receiverKey.contains(dropBoxType)){
 								// if both accounts are Dropbox
-								if(!checkKey(receiverKey)){
-									continue;
-								}
+								
 								storageProvider = new DropboxStorageProvider();
 								String[] fileNamesToSend = filetoSend.split("/");
 								String fileNametoSend = "/";
 								for(int i=startIndex;i<fileNamesToSend.length;i++){
 									fileNametoSend+=fileNamesToSend[i];
 								}
-								System.out.println(fileNametoSend);
+								//System.out.println(fileNametoSend);
 								transfer = storageProvider.copyFile(fileNametoSend, senderTokens, receiverTokens);
 								break;
+							}else if(senderKey.contains(dropBoxType) && receiverKey.contains(S3Type)){
+								storageProvider = new DropboxStorageProvider();
+								//receiverStorageProvider = new S3StorageProvider();
+				
+								String[] fileNamesToSend = filetoSend.split("/");
+								String fileNametoSend = "/";
+								for(int i=startIndex;i<fileNamesToSend.length;i++){
+									fileNametoSend+=fileNamesToSend[i];
+								}
+								
+								FileCopyStream copyStream = storageProvider.getFile(fileNametoSend, senderTokens);
+							
+								receiverStorageProvider.putFile(fileNametoSend, copyStream, receiverTokens);
+								
+							}else if(senderKey.contains(S3Type) && receiverKey.contains(dropBoxType)){
+								
+								//storageProvider = new S3StorageProvider();
+								receiverStorageProvider = new DropboxStorageProvider();
+								
+								String[] fileNamesToSend = filetoSend.split("/");
+								String fileNametoSend = "/";
+								for(int i=startIndex;i<fileNamesToSend.length;i++){
+									fileNametoSend+=fileNamesToSend[i];
+								}
+								
+								FileCopyStream copyStream = storageProvider.getFile(fileNametoSend, senderTokens);
+							
+								receiverStorageProvider.putFile(fileNametoSend, copyStream, receiverTokens);
+								
 							}
 						}
 					}
