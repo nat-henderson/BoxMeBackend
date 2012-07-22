@@ -1,7 +1,6 @@
 package hackathon.boxme;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 public interface StorageProvider {
@@ -9,13 +8,13 @@ public interface StorageProvider {
 	/*
 	 * Copy the file input stream to list of users given their credentials
 	 */
-	public void putFile(String fileKey, FileInputStream inputStream, String receiverCredentials);
+	public void putFile(String fileKey, InputStream inputStream, String receiverCredentials);
 	
 	/*
 	 *  Get the file output stream to list of users given sender credentials
 	 *  fileKey is an unique fileId 
 	 */
-	public FileOutputStream getFile(String fileKey, String senderCredentials);
+	public InputStream getFile(String fileKey, String senderCredentials);
 	
 	
 	/*
