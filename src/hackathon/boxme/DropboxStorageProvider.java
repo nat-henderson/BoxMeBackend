@@ -35,6 +35,7 @@ public class DropboxStorageProvider implements StorageProvider {
 				fileKey += keys[i]; 
 			}
 		}
+		System.out.pr
 		AccessTokenPair token = processCredentials(receiverCredentials);
 		AppKeyPair pair = this.appKeyPair;
 		System.out.println("putFile");
@@ -62,6 +63,15 @@ public class DropboxStorageProvider implements StorageProvider {
 	@Override
 	public boolean copyFile(String fileKey, String senderCredentials,
 			String receiverCredentials) {
+		String[] keys = fileKey.split(" ");
+		if (keys.length == 2) {
+			fileKey = "/";
+		} else {
+			fileKey = "";
+			for (int i = 2; i < keys.length; i++) {
+				fileKey += keys[i]; 
+			}
+		}
 		return copyFile(fileKey, senderCredentials, fileKey, receiverCredentials);
 	}
 
