@@ -93,18 +93,25 @@ public class StorageServiceHandler {
 			//Call the Data store and get an account list for the service provider
 			List<String> serviceProviders = null , returnList  = new ArrayList<String>();
 			//serviceProviders = getFromDbMock();
-			//Simple DB Call
-			serviceProviders = SimpleDBUtils.getAttributeList(userId);
+			
 			
 			String givenProvider = pathArray[providerPathIndex];
-			for(String providerKeys: serviceProviders){
-				String provider = providerKeys.split(" ")[providerIndex];
-				String uid = providerKeys.split(" ")[uidIndex];
-				if(provider.equals(givenProvider)){
-					returnList.add(provider+"/"+uid);
+			if(givenProvider.equals(S3Type)){
+				//Call S3 to get a list of buckets 
+				// and add them in directory structure
+				
+			}else{
+				//Simple DB Call
+				serviceProviders = SimpleDBUtils.getAttributeList(userId);
+				for(String providerKeys: serviceProviders){
+					String provider = providerKeys.split(" ")[providerIndex];
+					String uid = providerKeys.split(" ")[uidIndex];
+					if(provider.equals(givenProvider)){
+						returnList.add(provider+"/"+uid);
+					}
 				}
+				fileList.setDirectories(returnList);
 			}
-			fileList.setDirectories(returnList);
 		}else if(hierarchyLevel > 2){
 			String accountType = path.split("/")[dropBoxIndex];
 			String userName = path.split("/")[userNameIndex];
@@ -113,6 +120,16 @@ public class StorageServiceHandler {
 			if(accountType.equals(dropBoxType)){
 				//Make a new dropbox Storage Provider
 				storageProvider = new DropboxStorageProvider();
+				accountKey = accountType+" "+userName;
+				//accountTokens = accountCredentials.get(accountKey);
+				accountTokens = SimpleDBUtils.getAttribute(userId, accountKey);
+				//String[] accountTokensList = accountTokens.split("\n");
+				
+				fileList = storageProvider.getFilesUnderPath(directoryPath, accountTokens);
+				fileList.insertPrefix(accountType+userName);
+			}else if(accountType.equals(S3Type)){
+				//Make a new dropbox Storage Provider
+				storageProvider = new S3StorageProvider();
 				accountKey = accountType+" "+userName;
 				//accountTokens = accountCredentials.get(accountKey);
 				accountTokens = SimpleDBUtils.getAttribute(userId, accountKey);
@@ -194,7 +211,7 @@ public class StorageServiceHandler {
 								break;
 							}else if(senderKey.contains(dropBoxType) && receiverKey.contains(S3Type)){
 								storageProvider = new DropboxStorageProvider();
-								//receiverStorageProvider = new S3StorageProvider();
+								receiverStorageProvider = new S3StorageProvider();
 				
 								String[] fileNamesToSend = filetoSend.split("/");
 								String fileNametoSend = "/";
