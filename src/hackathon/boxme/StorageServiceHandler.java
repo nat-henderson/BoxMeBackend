@@ -2,6 +2,7 @@ package hackathon.boxme;
 
 import hackathon.boxme.utils.SimpleDBUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,6 +10,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 public class StorageServiceHandler {
 	/*
@@ -58,7 +64,7 @@ public class StorageServiceHandler {
 		return fileList;
 	}
 	
-	public DirectoryListing getFilesUnderPath(String userId, String path){
+	public String getFilesUnderPath(String userId, String path){
 		DirectoryListing allFiles = null, fileList = new DirectoryListing() ;
 		String directoryPath = "";
 		HashMap<String, String> accountCredentials = new HashMap<String, String>();
@@ -140,8 +146,25 @@ public class StorageServiceHandler {
 			}
 		}
 		
-
-		return fileList;
+		// Convert to Json 
+		
+		
+		ObjectMapper mapper = new ObjectMapper();
+		//JsonGenerator gen= new JsonGene;
+		String jsonReturn = null;
+		try {
+			jsonReturn = mapper.writeValueAsString(fileList);
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonReturn;
 	}
 				
 			
@@ -300,9 +323,11 @@ public class StorageServiceHandler {
 		receiverIds.add(receiver);
 		List<String> filestoSend= new ArrayList<String>();
 		filestoSend.add(file);
-		storageServiceHandler.putFiles(sender, filestoSend, receiverIds);
-		DirectoryListing allNames = storageServiceHandler.getFilesUnderPath("vtest", "/dropbox/");
-		if(allNames.getDirectories()!=null){
+		//storageServiceHandler.putFiles(sender, filestoSend, receiverIds);
+		String allNames = storageServiceHandler.getFilesUnderPath("vtest", "/dropbox/");
+		System.out.println(allNames);
+		/*
+		 *if(allNames.getDirectories()!=null){
 			for(String dir: allNames.getDirectories()){
 				System.out.println(dir);
 			}
@@ -312,6 +337,7 @@ public class StorageServiceHandler {
 				System.out.println(files);
 			}
 		}
+		*/
 	}
 
 }
