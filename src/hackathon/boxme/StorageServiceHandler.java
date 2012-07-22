@@ -35,6 +35,12 @@ public class StorageServiceHandler {
 	int userNameIndex = 1;
 	int startIndex = 2;
 	
+	public StorageServiceHandler(){
+		providerList.add("dropbox");
+		providerList.add("googleDrive");
+		providerList.add("S3");
+	}
+	
 	public String getFileList(String userId){
 		HashMap<String, String> accountCredentials = new HashMap<String, String>();
 		// Call to persistence store to get the account info
@@ -311,9 +317,9 @@ public class StorageServiceHandler {
 	
 	public static void main(String[] args){
 		StorageServiceHandler storageServiceHandler = new StorageServiceHandler();
-		storageServiceHandler.providerList.add("dropbox");
-		storageServiceHandler.providerList.add("googleDrive");
-		storageServiceHandler.providerList.add("S3");
+		//storageServiceHandler.providerList.add("dropbox");
+		//storageServiceHandler.providerList.add("googleDrive");
+		//storageServiceHandler.providerList.add("S3");
 		String sender = "vtest";
 		String receiver = "vtest";
 		String file = "dropbox/123/drivers.txt";
