@@ -30,12 +30,8 @@ public class BoxMeRequestHandler {
 				Object retVal = null;
 				try {
 					retVal = m.invoke(new StorageServiceHandler(), request.requestParameters);
-				} catch (IllegalAccessException  e1) {
-					e1.printStackTrace();
-				}catch (IllegalArgumentException e2){
-					e2.printStackTrace();
-				}catch(InvocationTargetException e3){
-					e3.printStackTrace();
+				} catch (Exception  e) {
+					e.printStackTrace();
 				}
 				ObjectMapper mapper = new ObjectMapper();
 				try {
