@@ -10,11 +10,12 @@ public class RegisterAccount {
 			DropBoxCredentials dbCredentials = (DropBoxCredentials) credentials;
 			result = RegisterDropBoxAccount(user, dbCredentials);
 		}
-		if(credentials.getType().equalsIgnoreCase("google")){
+		else if(credentials.getType().equalsIgnoreCase("google")){
 			GoogleCredentials googleCredentials = (GoogleCredentials) credentials;
 			result = RegisterGoogleAccount(user, googleCredentials);
 		}
 		else {
+			System.out.println(credentials.getType());
 			throw new AccountNotSupportedException();
 		}
 		return result;
