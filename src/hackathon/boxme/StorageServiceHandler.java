@@ -194,7 +194,7 @@ public class StorageServiceHandler {
 								break;
 							}else if(senderKey.contains(dropBoxType) && receiverKey.contains(S3Type)){
 								storageProvider = new DropboxStorageProvider();
-								//receiverStorageProvider = new S3StorageProvider();
+								receiverStorageProvider = new S3StorageProvider();
 				
 								String[] fileNamesToSend = filetoSend.split("/");
 								String fileNametoSend = "/";

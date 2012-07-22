@@ -100,5 +100,10 @@ public class S3StorageProvider implements StorageProvider {
 	public List<String> listAllFiles(String credentials) {
 		throw new RuntimeException(new OperationNotSupportedException());
 	}
+	
+	public static void main (String[] args) {
+		S3StorageProvider prov = new S3StorageProvider();
+		System.out.println(prov.getFilesUnderPath("mckinn-123/", "AKIAJRAW7KQ7ZLUM54YQ Y/IuAhHJ3yfH3xd9dQ2UlAO4C8ERxOLKnUev+y7h").getFiles());
+	}
 
 }
