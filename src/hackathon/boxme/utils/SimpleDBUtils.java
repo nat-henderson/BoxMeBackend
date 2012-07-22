@@ -2,6 +2,7 @@ package hackathon.boxme.utils;
 	
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.List;
 
@@ -67,15 +68,16 @@ public class SimpleDBUtils {
 	      }
 	   }
 
-	   public static List<ItemAttribute> getAttributes(String item) {
+	   public static HashMap<String,String> getAttributes(String item) {
 		   List<ItemAttribute> attrs = new ArrayList<ItemAttribute>();
+		   HashMap<String,String> hashmap = new HashMap<String,String>();
 		   try{
 		   	  Domain dom = simpleDB.getDomain(domain_name);
 	          Item i = dom.getItem(item);
 	          
 	          attrs = i.getAttributes();
 	          for (ItemAttribute attr : attrs) {
-	              System.out.println(attr.getName() + " = " + attr.getValue());
+	        	  hashmap.put(attr.getName(), attr.getValue());
 	          }
 
 	      } catch (SDBException ex) {
@@ -85,7 +87,7 @@ public class SimpleDBUtils {
 	              System.err.println("Error occured: " + e.getMessage());
 	              e.printStackTrace();
 	      }
-	      return attrs;
+	      return hashmap;
 	   }
 	   
 	   public static List<String> getAttributeList(String item) {
