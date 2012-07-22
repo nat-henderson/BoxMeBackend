@@ -8,20 +8,20 @@ public interface StorageProvider {
 	/*
 	 * Copy the file input stream to list of users given their credentials
 	 */
-	public void putFile(String fileKey, InputStream inputStream, String receiverCredentials);
+	public void putFile(String fileKey, FileCopyStream stream, String receiverCredentials);
 	
 	/*
 	 *  Get the file output stream to list of users given sender credentials
 	 *  fileKey is an unique fileId 
 	 */
-	public InputStream getFile(String fileKey, String senderCredentials);
+	public FileCopyStream getFile(String fileKey, String senderCredentials);
 	
 	
 	/*
 	 *  copyFiles between a sender and a receiver
 	 *  fileKey is an unique fileId 
 	 */
-	public boolean copyFile(String fileKey, String senderCredentials, List<String> receiverCredentials);
+	public boolean copyFile(String fileKey, String senderCredentials, String receiverCredentials);
 	
 	/*
 	 * Return a list of files given credentials

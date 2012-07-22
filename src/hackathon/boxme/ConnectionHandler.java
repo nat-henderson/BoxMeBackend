@@ -37,10 +37,14 @@ public class ConnectionHandler implements Runnable {
 		}
 		BoxMeRequestHandler handler = new BoxMeRequestHandler();
 		
-		clientSocket.getOutputStream().write(
-				handler.handle(request).getBytes());
-		clientSocket.getOutputStream().flush();
-		clientSocket.close();
-		return;
+		try {
+			clientSocket.getOutputStream().write(
+					handler.handle(request).getBytes());
+		} catch (NoSuchMethodException e) {
+			clientSocket.getOutputStream().write(e.toString().getBytes());
+		} finally {
+			clientSocket.getOutputStream().flush();
+			clientSocket.close();
+		}
 	}
 }
