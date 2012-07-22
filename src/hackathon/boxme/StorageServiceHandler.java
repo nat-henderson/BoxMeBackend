@@ -68,7 +68,7 @@ public class StorageServiceHandler {
 			//String[] accountTokensList = accountTokens.split("\n");
 			
 			fileList = storageProvider.getFilesUnderPath(directoryPath, accountTokens);
-			
+			fileList.insertPrefix(accountType+userName);
 		}
 		return fileList;
 	}
